@@ -18,7 +18,7 @@ st.set_page_config(
 HISTORICO_ARQUIVO = "historico.csv"
 
 
-def salvar_historico(latitude, longitude, clima, risco, recomendacao, prioridade):
+def salvar_historico(latitude, longitude, clima, resultado_ia, risco_formatado, recomendacao, prioridade):
     novo_registro = pd.DataFrame([{
         "data_hora": datetime.now().strftime("%d/%m/%Y %H:%M:%S"),
         "latitude": latitude,
@@ -28,7 +28,8 @@ def salvar_historico(latitude, longitude, clima, risco, recomendacao, prioridade
         "chance_chuva": clima["chance_chuva"],
         "velocidade_vento": clima["velocidade_vento"],
         "descricao": clima["descricao"],
-        "risco": risco,
+        "risco": risco_formatado,
+        "confianca_ia": resultado_ia["confianca"],
         "prioridade": prioridade,
         "recomendacao": recomendacao
     }])
@@ -88,12 +89,15 @@ if st.button("🔍 Analisar risco agrícola"):
     with st.spinner("Consultando OpenWeather e analisando dados com Machine Learning..."):
         clima = buscar_clima(latitude, longitude)
 
-        risco = prever_risco(
+        resultado_ia = prever_risco(
             clima["temperatura"],
             clima["umidade"],
             clima["chance_chuva"],
             clima["velocidade_vento"]
         )
+
+    risco = resultado_ia["risco"]
+    confianca = resultado_ia["confianca"]
 
     if risco == "Baixo risco":
         risco_formatado = "🟢 Baixo risco climático para a plantação"
@@ -123,6 +127,7 @@ if st.button("🔍 Analisar risco agrícola"):
         latitude,
         longitude,
         clima,
+        resultado_ia,
         risco_formatado,
         recomendacao,
         prioridade
@@ -163,14 +168,34 @@ if st.button("🔍 Analisar risco agrícola"):
 
     st.header("🤖 Resultado da IA")
 
-    if prioridade == 1:
-        st.success(risco_formatado)
-    elif prioridade == 2:
-        st.warning(risco_formatado)
-    else:
-        st.error(risco_formatado)
+    resultado_col1, resultado_col2 = st.columns(2)
+
+    with resultado_col1:
+        if prioridade == 1:
+            st.success(risco_formatado)
+        elif prioridade == 2:
+            st.warning(risco_formatado)
+        else:
+            st.error(risco_formatado)
+
+    with resultado_col2:
+        st.metric("Confiança da previsão", f"{confianca}%")
 
     st.info(f"**Recomendação da IA:** {recomendacao}")
+
+    st.subheader("🔍 Motivos analisados pela IA")
+
+    for motivo in resultado_ia["motivos"]:
+        st.write(f"• {motivo}")
+
+    st.subheader("📌 Probabilidade por classe")
+
+    probabilidades_df = pd.DataFrame({
+        "Classe": list(resultado_ia["probabilidades"].keys()),
+        "Probabilidade (%)": list(resultado_ia["probabilidades"].values())
+    })
+
+    st.bar_chart(probabilidades_df.set_index("Classe"))
 
     st.divider()
 
@@ -190,6 +215,7 @@ if st.button("🔍 Analisar risco agrícola"):
     - Tipo de alerta: `Risco climático agrícola`
     - Descrição: `{risco_formatado}`
     - Nível de risco: `{prioridade}`
+    - Confiança da IA: `{confianca}%`
 
     **Tabela `agro_recomendacoes_ia`**
     - Recomendação: `{recomendacao}`

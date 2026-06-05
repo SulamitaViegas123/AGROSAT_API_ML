@@ -1,2 +1,3 @@
-data_hora,latitude,longitude,temperatura,umidade,chance_chuva,velocidade_vento,descricao,risco,prioridade,recomendacao
-05/06/2026 19:20:23,-23.5505,-46.6333,16.1,84,20,2.68,nuvens dispersas,🟢 Baixo risco climático para a plantação,1,Condição climática favorável para o cultivo. Recomenda-se manter o monitoramento periódico da propriedade.
+data_hora,latitude,longitude,temperatura,umidade,chance_chuva,velocidade_vento,descricao,risco,prioridade,recomendacao,confianca_ia
+05/06/2026 19:20:23,-23.5505,-46.6333,16.1,84,20,2.68,nuvens dispersas,🟢 Baixo risco climático para a plantação,1,Condição climática favorável para o cultivo. Recomenda-se manter o monitoramento periódico da propriedade.,
+05/06/2026 20:37:15,-23.5505,-46.6333,14.99,87,20,2.24,nuvens dispersas,🟢 Baixo risco climático para a plantação,1,Condição climática favorável para o cultivo. Recomenda-se manter o monitoramento periódico da propriedade.,100.0
