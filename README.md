@@ -1,4 +1,4 @@
-# 🌱 AgroSat ML
+# 🌱 AGROSAT ML
 
 Sistema inteligente de previsão de risco agrícola utilizando **OpenWeather API** e **Machine Learning**.
 
