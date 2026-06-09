@@ -18,9 +18,10 @@ st.set_page_config(
 HISTORICO_ARQUIVO = "historico.csv"
 
 
-def salvar_historico(latitude, longitude, clima, resultado_ia, risco_formatado, recomendacao, prioridade):
+def salvar_historico(latitude, longitude, clima, risco_formatado, recomendacao, prioridade):
     novo_registro = pd.DataFrame([{
         "data_hora": datetime.now().strftime("%d/%m/%Y %H:%M:%S"),
+        "localidade": clima.get("localidade", "Não informado"),
         "latitude": latitude,
         "longitude": longitude,
         "temperatura": clima["temperatura"],
@@ -29,7 +30,6 @@ def salvar_historico(latitude, longitude, clima, resultado_ia, risco_formatado, 
         "velocidade_vento": clima["velocidade_vento"],
         "descricao": clima["descricao"],
         "risco": risco_formatado,
-        "confianca_ia": resultado_ia["confianca"],
         "prioridade": prioridade,
         "recomendacao": recomendacao
     }])
@@ -97,7 +97,6 @@ if st.button("🔍 Analisar risco agrícola"):
         )
 
     risco = resultado_ia["risco"]
-    confianca = resultado_ia["confianca"]
 
     if risco == "Baixo risco":
         risco_formatado = "🟢 Baixo risco climático para a plantação"
@@ -127,7 +126,6 @@ if st.button("🔍 Analisar risco agrícola"):
         latitude,
         longitude,
         clima,
-        resultado_ia,
         risco_formatado,
         recomendacao,
         prioridade
@@ -137,14 +135,15 @@ if st.button("🔍 Analisar risco agrícola"):
 
     st.header("📊 Dados climáticos coletados")
 
+    st.write(f"**Localidade identificada:** {clima.get('localidade', 'Não informado')}")
+    st.write(f"**Descrição climática:** {clima['descricao']}")
+
     card1, card2, card3, card4 = st.columns(4)
 
     card1.metric("Temperatura", f"{clima['temperatura']} °C")
     card2.metric("Umidade", f"{clima['umidade']}%")
     card3.metric("Chance de chuva", f"{clima['chance_chuva']}%")
     card4.metric("Vento", f"{clima['velocidade_vento']} m/s")
-
-    st.write(f"**Descrição climática:** {clima['descricao']}")
 
     dados_grafico = pd.DataFrame({
         "Indicador": [
@@ -168,18 +167,12 @@ if st.button("🔍 Analisar risco agrícola"):
 
     st.header("🤖 Resultado da IA")
 
-    resultado_col1, resultado_col2 = st.columns(2)
-
-    with resultado_col1:
-        if prioridade == 1:
-            st.success(risco_formatado)
-        elif prioridade == 2:
-            st.warning(risco_formatado)
-        else:
-            st.error(risco_formatado)
-
-    with resultado_col2:
-        st.metric("Confiança da previsão", f"{confianca}%")
+    if prioridade == 1:
+        st.success(risco_formatado)
+    elif prioridade == 2:
+        st.warning(risco_formatado)
+    else:
+        st.error(risco_formatado)
 
     st.info(f"**Recomendação da IA:** {recomendacao}")
 
@@ -205,6 +198,7 @@ if st.button("🔍 Analisar risco agrícola"):
     A análise realizada seria registrada no banco de dados do AgroSat da seguinte forma:
 
     **Tabela `agro_dados_climaticos`**
+    - Localidade: `{clima.get("localidade", "Não informado")}`
     - Temperatura: `{clima["temperatura"]}`
     - Umidade: `{clima["umidade"]}`
     - Chance de chuva: `{clima["chance_chuva"]}`
@@ -215,13 +209,11 @@ if st.button("🔍 Analisar risco agrícola"):
     - Tipo de alerta: `Risco climático agrícola`
     - Descrição: `{risco_formatado}`
     - Nível de risco: `{prioridade}`
-    - Confiança da IA: `{confianca}%`
 
     **Tabela `agro_recomendacoes_ia`**
     - Recomendação: `{recomendacao}`
     - Prioridade: `{prioridade}`
     """)
-
 
 st.divider()
 
@@ -234,13 +226,38 @@ if historico.empty:
 else:
     st.dataframe(historico, use_container_width=True)
 
-    st.subheader("📉 Evolução dos dados analisados")
+    st.divider()
 
-    historico_grafico = historico[[
-        "temperatura",
-        "umidade",
-        "chance_chuva",
-        "velocidade_vento"
-    ]]
+st.header("🧪 Simulador técnico do modelo")
 
-    st.line_chart(historico_grafico)
+st.markdown("""
+Esta área permite testar o comportamento do modelo com valores controlados,
+sem consultar a OpenWeather. Ela serve para demonstrar que o modelo também
+classifica cenários de médio e alto risco.
+""")
+
+sim_temp = st.slider("Temperatura simulada", 10, 45, 35)
+sim_umidade = st.slider("Umidade simulada", 0, 100, 85)
+sim_chuva = st.slider("Chance de chuva simulada", 0, 100, 80)
+sim_vento = st.slider("Velocidade do vento simulada", 0, 40, 25)
+
+if st.button("🧠 Testar modelo com dados simulados"):
+    resultado_simulado = prever_risco(
+        sim_temp,
+        sim_umidade,
+        sim_chuva,
+        sim_vento
+    )
+
+    risco_simulado = resultado_simulado["risco"]
+
+    if risco_simulado == "Baixo risco":
+        st.success("🟢 Baixo risco climático")
+    elif risco_simulado == "Médio risco":
+        st.warning("🟡 Médio risco climático")
+    else:
+        st.error("🔴 Alto risco climático")
+
+    st.write("**Motivos analisados:**")
+    for motivo in resultado_simulado["motivos"]:
+        st.write(f"• {motivo}")
