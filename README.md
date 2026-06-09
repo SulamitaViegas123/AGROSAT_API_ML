@@ -97,12 +97,13 @@ A aplicação envia:
 * Longitude
 * API Key
 
-E recebe dados reais como:
+E recebe dados climáticos em tempo real como:
 
 * Temperatura
 * Umidade
 * Velocidade do vento
 * Descrição climática
+* Localidade identificada
 
 ---
 
@@ -160,35 +161,56 @@ Essas tabelas representam, respectivamente:
 
 ---
 
-## ▶️ Como executar o projeto
+## 🚀 Como executar o projeto
 
-### 1. Instalar dependências
+### 1️⃣ Clonar o repositório
+
+```bash
+git clone https://github.com/SulamitaViegas123/AGROSAT_API_ML.git
+cd AGROSAT_API_ML
+```
+
+### 2️⃣ Instalar as dependências
 
 ```bash
 pip install -r requirements.txt
 ```
 
-### 2. Treinar o modelo
+### 3️⃣ Criar arquivo .env
+
+Na raiz do projeto, criar um arquivo chamado:
+
+```txt
+.env
+```
+
+Conteúdo:
+
+```env
+OPENWEATHER_API_KEY=CHAVE_API
+```
+
+A chave pode ser obtida gratuitamente na OpenWeather.
+
+### 4️⃣ Treinar o modelo
 
 ```bash
 python train_model.py
 ```
 
-Esse comando gera o arquivo:
+Será gerado:
 
 ```txt
 modelo_risco.pkl
 ```
 
-### 3. Executar o dashboard
+### 5️⃣ Executar a aplicação
 
 ```bash
 python -m streamlit run app.py
 ```
 
-### 4. Acessar no navegador
-
-O Streamlit abrirá automaticamente. Caso não abra, acesse:
+A aplicação ficará disponível em:
 
 ```txt
 http://localhost:8501
@@ -196,40 +218,83 @@ http://localhost:8501
 
 ---
 
-## 🔑 Configuração da API Key
+## 🔑 Configuração da OpenWeather
 
-No arquivo `openweather_service.py`, insira sua chave da OpenWeather:
+O projeto utiliza uma chave da OpenWeather armazenada em variável de ambiente através do arquivo `.env`.
 
-```python
-API_KEY = "SUA_CHAVE_AQUI"
-```
+Essa abordagem evita expor credenciais diretamente no código-fonte e segue boas práticas de desenvolvimento.
 
 ---
 
 ## ✅ Resultado esperado
 
-Após informar latitude e longitude, o sistema exibe:
+Após informar latitude e longitude, o sistema realiza:
 
-* Dados climáticos reais
-* Gráfico dos indicadores
-* Resultado da IA
-* Recomendação automática
-* Histórico das análises
-* Simulação de integração com banco de dados
+* Consulta climática em tempo real utilizando a OpenWeather API;
+* Identificação automática da localidade consultada;
+* Coleta de temperatura, umidade, velocidade do vento e condição climática;
+* Classificação do risco climático utilizando Machine Learning;
+* Geração automática de recomendações;
+* Registro da análise em histórico local;
+* Simulação da integração com as tabelas do projeto AgroSat.
+
+Além disso, o sistema disponibiliza um simulador técnico para validação do comportamento do modelo em cenários de baixo, médio e alto risco.
 
 ---
 
-## 👨‍💻 Status do projeto
+## 🗄️ Persistência de Dados
+
+A versão atual utiliza:
+
+```txt
+historico.csv
+```
+
+para armazenamento local das análises realizadas.
+
+A arquitetura foi preparada para futura integração com o banco de dados do projeto AgroSat através das tabelas:
+
+* agro_dados_climaticos
+* agro_alertas
+* agro_recomendacoes_ia
+
+---
+
+## 📂 Estrutura do Projeto
+
+```text
+AGROSAT-ML
+│
+├── app.py
+├── openweather_service.py
+├── predict.py
+├── train_model.py
+├── dataset.csv
+├── modelo_risco.pkl
+├── historico.csv
+├── requirements.txt
+├── README.md
+├── .gitignore
+└── .env (não versionado)
+```
+
+---
+
+## 👨‍💻 Status do Projeto
 
 Projeto funcional com:
 
-* ✅ Consulta real à OpenWeather API
-* ✅ Modelo de Machine Learning treinado
-* ✅ Dashboard interativo
-* ✅ Histórico de análises
-* ✅ Simulação de integração com banco relacional
-* ✅ Diagrama de arquitetura
+* ✅ Consulta climática via OpenWeather API
+* ✅ Machine Learning com Random Forest
+* ✅ Dashboard interativo em Streamlit
+* ✅ Identificação automática da localidade
+* ✅ Histórico de consultas por localidade
+* ✅ Histórico persistido em CSV
+* ✅ Simulador técnico do modelo
+* ✅ Arquitetura documentada
+* ✅ Diagrama da solução
 * ✅ Documentação de execução
+* ✅ Preparado para futura integração com banco relacional AgroSat
 
 ---
 
