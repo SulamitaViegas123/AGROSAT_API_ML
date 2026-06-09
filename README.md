@@ -312,6 +312,7 @@ Dentro da **Global Solution - FIAP**.
 
 | RM | Nome |
 |---|---|
+| RM560169 | Antonio de Luca Ribeiro Silva |
 | RM560914 | Lucas Siqueira de Almeida |
 | RM561090 | Matteus Viegas dos Santos |
 | RM561089 | Sulamita Viegas dos Santos |
