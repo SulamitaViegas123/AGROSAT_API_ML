@@ -1,4 +1,3 @@
 data_hora,localidade,latitude,longitude,temperatura,umidade,chance_chuva,velocidade_vento,descricao,risco,prioridade,recomendacao
-09/06/2026 11:08:35,Salvador - Bahia - BR,-12.9714,-38.5014,25.49,67,0,4.32,algumas nuvens,🟢 Baixo risco climático para a plantação,1,Condição climática favorável para o cultivo. Recomenda-se manter o monitoramento periódico da propriedade.
-09/06/2026 11:09:44,Plano Piloto - Federal District - BR,-15.7939,-47.8828,24.2,53,0,0.56,nublado,🟢 Baixo risco climático para a plantação,1,Condição climática favorável para o cultivo. Recomenda-se manter o monitoramento periódico da propriedade.
-09/06/2026 11:10:11,New Valley - New Valley - EG,23.4162,25.6628,35.1,9,0,5.99,céu limpo,🔴 Alto risco climático para a plantação,3,"Recomenda-se verificar irrigação, drenagem, proteção da cultura e possibilidade de perdas agrícolas."
+11/06/2026 10:42:24,New Valley - New Valley - EG,23.4162,25.6628,36.15,10,0,3.61,céu limpo,🔴 Alto risco climático para a plantação,3,"Recomenda-se verificar irrigação, drenagem, proteção da cultura e possibilidade de perdas agrícolas."
+11/06/2026 10:43:42,Plano Piloto - Federal District - BR,-15.7939,-47.8828,23.08,66,0,1.56,nublado,🟢 Baixo risco climático para a plantação,1,Condição climática favorável para o cultivo. Recomenda-se manter o monitoramento periódico da propriedade.
