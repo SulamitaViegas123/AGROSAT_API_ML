@@ -297,6 +297,12 @@ Projeto funcional com:
 * ✅ Preparado para futura integração com banco relacional AgroSat
 
 ---
+## 🏗️ Arquitetura da Solução
+
+O diagrama abaixo apresenta a arquitetura macro do AgroSat ML, demonstrando o fluxo completo desde a coleta dos dados climáticos até a geração das recomendações inteligentes.
+
+![Arquitetura AgroSat ML](DIAGRAMA_AGROSAT_IA.png)
+---
 
 ## 📚 Disciplina
 
